@@ -7,8 +7,7 @@ function Get-AsnFundPrice
     $DutchCulture = [cultureinfo]::new('nl-NL')
 
     $Content = Invoke-WebRequest https://www.asnbank.nl/beleggen/koersen.html `
-    | Select-Object -ExpandProperty Content `
-    | hxnormalize -x -l 1000 -i 0
+    | Select-Object -ExpandProperty Content
 
     $Dates = $Content
     | pup '.fundrates thead tr text{}' --plain
