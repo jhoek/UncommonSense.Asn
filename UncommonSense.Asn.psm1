@@ -1,10 +1,28 @@
+function ConvertTo-DecimalOrNull
+{
+    param
+    (
+        [Parameter(Mandatory, Position = 0)]
+        [string]$Value,
+
+        [ValidateNotNull()]
+        [CultureInfo]$FormatProvider = [cultureinfo]::GetCultureInfo('nl-NL')
+    )
+
+    [decimal]$Result = 0
+
+    switch ([decimal]::TryParse($Value, [System.Globalization.NumberStyles]::Currency, $FormatProvider, [ref]$Result ))
+    {
+        $true { return $Result }
+        $false { return $null }
+    }
+}
+
 function Get-AsnFundPrice
 {
     param
     (
     )
-
-    $DutchCulture = [cultureinfo]::new('nl-NL')
 
     $Content = Invoke-WebRequest https://www.asnbank.nl/beleggen/koersen.html `
     | Select-Object -ExpandProperty Content
@@ -35,7 +53,7 @@ function Get-AsnFundPrice
             ($CurrentIndex % 4 -eq 1)
             {
                 $CurrentFundProperties.Date = $Dates[0]
-                $CurrentFundProperties.Price = [decimal]::Parse($Cells[$CurrentIndex], $DutchCulture)
+                $CurrentFundProperties.Price = ConvertTo-DecimalOrNull -Value $Cells[$CurrentIndex]
                 [PSCustomObject]$CurrentFundProperties
                 break
             }
@@ -43,7 +61,7 @@ function Get-AsnFundPrice
             ($CurrentIndex % 4 -eq 2)
             {
                 $CurrentFundProperties.Date = $Dates[1]
-                $CurrentFundProperties.Price = [decimal]::Parse($Cells[$CurrentIndex], $DutchCulture)
+                $CurrentFundProperties.Price = ConvertTo-DecimalOrNull -Value $Cells[$CurrentIndex]
                 [PSCustomObject]$CurrentFundProperties
                 break
             }
@@ -51,7 +69,7 @@ function Get-AsnFundPrice
             ($CurrentIndex % 4 -eq 3)
             {
                 $CurrentFundProperties.Date = $Dates[2]
-                $CurrentFundProperties.Price = [decimal]::Parse($Cells[$CurrentIndex], $DutchCulture)
+                $CurrentFundProperties.Price = ConvertTo-DecimalOrNull -Value $Cells[$CurrentIndex]
                 [PSCustomObject]$CurrentFundProperties
                 break
             }
