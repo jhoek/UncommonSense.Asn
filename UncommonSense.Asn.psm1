@@ -27,13 +27,13 @@ function Get-AsnFundPrice
     $Document = ConvertTo-HtmlDocument -Uri https://www.asnbank.nl/beleggen/koersen.html
 
     $Dates = $Document
-    | Select-HtmlNode -CssSelector '.fundrates thead tr'
+    | Select-HtmlNode -CssSelector '.fundrates thead tr th' -All
     | ForEach-Object { $_.InnerText.Trim() }
     | Where-Object { $_ }
     | Select-Object -Skip 1
     | ForEach-Object { [DateTime]::ParseExact($_, 'dd-MM-yyyy', $DutchCulture) }
 
-    $Cells = $Document | Select-HtmlNode -CssSelector '.fundrates tbody tr td'
+    $Cells = $Document | Select-HtmlNode -CssSelector '.fundrates tbody tr td' -All
 
     0..($Cells.Length - 1) | ForEach-Object {
         $CurrentIndex = $_
@@ -44,7 +44,7 @@ function Get-AsnFundPrice
             {
                 $CurrentFundProperties = [Ordered]@{}
                 $CurrentFundProperties.PSTypeName = 'UncommonSense.Asn.FundPrice'
-                $CurrentFundProperties.Fund = $Cells[$CurrentIndex].InnerText
+                $CurrentFundProperties.Fund = [System.Web.HttpUtility]::HtmlDecode($Cells[$CurrentIndex].InnerText)
                 break
             }
 
