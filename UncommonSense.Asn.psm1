@@ -24,18 +24,16 @@ function Get-AsnFundPrice
     (
     )
 
-    $Content = Invoke-WebRequest https://www.asnbank.nl/beleggen/koersen.html `
-    | Select-Object -ExpandProperty Content
+    $Document = ConvertTo-HtmlDocument -Uri https://www.asnbank.nl/beleggen/koersen.html
 
-    $Dates = $Content
-    | pup '.fundrates thead tr text{}' --plain
-    | ForEach-Object { $_.Trim() }
+    $Dates = $Document
+    | Select-HtmlNode -CssSelector '.fundrates thead tr th' -All
+    | ForEach-Object { $_.InnerText.Trim() }
     | Where-Object { $_ }
     | Select-Object -Skip 1
     | ForEach-Object { [DateTime]::ParseExact($_, 'dd-MM-yyyy', $DutchCulture) }
 
-    $Cells = $Content
-    | pup '.fundrates tbody tr td text{}' --plain
+    $Cells = $Document | Select-HtmlNode -CssSelector '.fundrates tbody tr td' -All
 
     0..($Cells.Length - 1) | ForEach-Object {
         $CurrentIndex = $_
@@ -46,14 +44,14 @@ function Get-AsnFundPrice
             {
                 $CurrentFundProperties = [Ordered]@{}
                 $CurrentFundProperties.PSTypeName = 'UncommonSense.Asn.FundPrice'
-                $CurrentFundProperties.Fund = $Cells[$CurrentIndex]
+                $CurrentFundProperties.Fund = [System.Web.HttpUtility]::HtmlDecode($Cells[$CurrentIndex].InnerText)
                 break
             }
 
             ($CurrentIndex % 4 -eq 1)
             {
                 $CurrentFundProperties.Date = $Dates[0]
-                $CurrentFundProperties.Price = ConvertTo-DecimalOrNull -Value $Cells[$CurrentIndex]
+                $CurrentFundProperties.Price = ConvertTo-DecimalOrNull -Value $Cells[$CurrentIndex].InnerText
                 [PSCustomObject]$CurrentFundProperties
                 break
             }
@@ -61,7 +59,7 @@ function Get-AsnFundPrice
             ($CurrentIndex % 4 -eq 2)
             {
                 $CurrentFundProperties.Date = $Dates[1]
-                $CurrentFundProperties.Price = ConvertTo-DecimalOrNull -Value $Cells[$CurrentIndex]
+                $CurrentFundProperties.Price = ConvertTo-DecimalOrNull -Value $Cells[$CurrentIndex].InnerText
                 [PSCustomObject]$CurrentFundProperties
                 break
             }
@@ -69,7 +67,7 @@ function Get-AsnFundPrice
             ($CurrentIndex % 4 -eq 3)
             {
                 $CurrentFundProperties.Date = $Dates[2]
-                $CurrentFundProperties.Price = ConvertTo-DecimalOrNull -Value $Cells[$CurrentIndex]
+                $CurrentFundProperties.Price = ConvertTo-DecimalOrNull -Value $Cells[$CurrentIndex].InnerText
                 [PSCustomObject]$CurrentFundProperties
                 break
             }
