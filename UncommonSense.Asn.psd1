@@ -66,7 +66,7 @@
     FormatsToProcess  = @('UncommonSense.Asn.Format.ps1xml')
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    # NestedModules = @()
+    NestedModules     = @('UncommonSense.Hap')
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = 'Get-AsnFundPrice'
@@ -95,13 +95,13 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags       = @('powershell', 'investment', 'asnbank')
+            Tags                       = @('powershell', 'investment', 'asnbank')
 
             # A URL to the license for this module.
-            LicenseUri = 'https://github.com/jhoek/UncommonSense.Asn/blob/master/LICENSE'
+            LicenseUri                 = 'https://github.com/jhoek/UncommonSense.Asn/blob/master/LICENSE'
 
             # A URL to the main website for this project.
-            ProjectUri = 'https://github.com/jhoek/UncommonSense.Asn'
+            ProjectUri                 = 'https://github.com/jhoek/UncommonSense.Asn'
 
             # A URL to an icon representing this module.
             # IconUri = ''
@@ -116,7 +116,7 @@
             # RequireLicenseAcceptance = $false
 
             # External dependent modules of this module
-            # ExternalModuleDependencies = @()
+            ExternalModuleDependencies = @('UncommonSense.Hap')
 
         } # End of PSData hashtable
 

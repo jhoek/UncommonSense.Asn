@@ -3,6 +3,5 @@ Import-Module (Join-Path -Path $PSScriptRoot -ChildPath UncommonSense.Asn.psd1) 
 Get-Command -Module UncommonSense.Asn |
     Convert-HelpToMarkDown `
         -Title 'UncommonSense.Asn' `
-        -Preface PREFACE.md `
         -Description 'PowerShell module for ASN Bank investments funds' |
     Out-File -FilePath (Join-Path -Path $PSScriptRoot -ChildPath README.md) -Encoding utf8
