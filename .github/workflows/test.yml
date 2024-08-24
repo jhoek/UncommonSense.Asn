@@ -1,0 +1,26 @@
+name: test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  schedule:
+  -  cron: '0 0 * * *'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install required PowerShell modules
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module UncommonSense.Hap -Scope CurrentUser
+
+      - name: Invoke Pester
+        shell: pwsh
+        run: Invoke-Pester -Output Detailed
