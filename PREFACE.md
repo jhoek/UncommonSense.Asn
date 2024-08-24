@@ -1,0 +1,1 @@
+[![test](https://github.com/jhoek/UncommonSense.Asn/actions/workflows/test.yml/badge.svg)](https://github.com/jhoek/UncommonSense.Asn/actions/workflows/test.yml)
