@@ -1,5 +1,5 @@
 {
   "ModuleName": "UncommonSense.Asn",
   "Name": "Get-AsnFundPrice",
-  "Synopsis": "\nGet-AsnFundPrice \n"
+  "Synopsis": "Retrieves ASN Bank investment fund prices"
 }
