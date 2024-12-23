@@ -18,6 +18,12 @@ function ConvertTo-DecimalOrNull
     }
 }
 
+<#
+.SYNOPSIS
+Retrieves ASN Bank investment fund prices
+.EXAMPLE
+Get-AsnFundPrice
+#>
 function Get-AsnFundPrice
 {
     param
