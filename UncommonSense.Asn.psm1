@@ -33,13 +33,13 @@ function Get-AsnFundPrice
     $Document = ConvertTo-HtmlDocument -Uri https://www.asnbank.nl/beleggen/koersen.html
 
     $Dates = $Document
-    | Select-HtmlNode -CssSelector '.fundrates thead tr th' -All
+    | Select-HtmlNode -CssSelector '.fund-rates thead tr th' -All
     | ForEach-Object { $_.InnerText.Trim() }
     | Where-Object { $_ }
     | Select-Object -Skip 1
     | ForEach-Object { [DateTime]::ParseExact($_, 'dd-MM-yyyy', $DutchCulture) }
 
-    $Cells = $Document | Select-HtmlNode -CssSelector '.fundrates tbody tr td' -All
+    $Cells = $Document | Select-HtmlNode -CssSelector '.fund-rates tbody tr td' -All
 
     0..($Cells.Length - 1) | ForEach-Object {
         $CurrentIndex = $_
