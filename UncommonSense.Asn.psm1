@@ -3,6 +3,7 @@ function ConvertTo-DecimalOrNull
     param
     (
         [Parameter(Mandatory, Position = 0)]
+        [AllowEmptyString()]
         [string]$Value,
 
         [ValidateNotNull()]
